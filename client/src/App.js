@@ -1,10 +1,11 @@
+import Home from "./Pages/Home";
 import Footer from "./Components/Footer";
 
 function App() {
   return (
     <div>
-      Hello
-      <Footer/>
+      <Home />
+      <Footer />
     </div>
   );
 }
