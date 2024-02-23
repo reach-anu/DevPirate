@@ -1,10 +1,13 @@
+import Navbar from "./Components/Navbar";
+import Home from "./Pages/Home";
 import Footer from "./Components/Footer";
 
 function App() {
   return (
     <div>
-      Hello
-      <Footer/>
+    <Navbar />
+    <Home />
+    <Footer />
     </div>
   );
 }
