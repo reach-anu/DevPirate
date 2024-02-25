@@ -1,7 +1,7 @@
 .homeContainer {
   /* background-color: #ffdab9; */
   background: linear-gradient(
-    to bottom,
+    130deg,
     #071b2d,
     #0e2d45,
     #163d5b,
@@ -17,17 +17,17 @@
 }
 
 #wave1 {
-  animation: animate 3s linear infinite;
+  animation: animate 4s linear infinite;
 }
 #wave4 {
-  animation: animate2 4s linear infinite;
+  animation: animate2 5s linear infinite;
 }
 
 #wave3 {
-  animation: animate 3.5s linear infinite;
+  animation: animate 4.5s linear infinite;
 }
 #wave2 {
-  animation: animate2 4s linear infinite;
+  animation: animate2 5s linear infinite;
 }
 @keyframes animate {
   0% {
