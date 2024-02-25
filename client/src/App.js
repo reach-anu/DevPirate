@@ -1,12 +1,12 @@
 import Navbar from "./Components/Navbar";
-import Home from "./Pages/Home";
+import LandingPage from "./Pages/LandingPage";
 import Footer from "./Components/Footer";
 
 function App() {
   return (
     <div>
     <Navbar />
-    <Home />
+    <LandingPage />
     <Footer />
     </div>
   );
