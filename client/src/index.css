@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body{
+  overflow-x: hidden;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.homeContainer {
+  background: linear-gradient(
+    130deg,
+    #071b2d,
+    #0e2d45,
+    #163d5b,
+    #1d4c6f,
+    #214a6f
+  );
+}
+
+.bgPhoto {
+  object-fit: cover; 
+  mask-image: linear-gradient(to right, #ffffff00 5%, rgba(0, 0, 0, 0.773));
+}
