@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  margin: 0;
+  padding: 0;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  background-color: #002147;
+}
+section {
+  scroll-snap-align: center;
+  max-height: auto;
+}
+
 body{
   overflow-x: hidden;
 }
