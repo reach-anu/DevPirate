@@ -9,12 +9,8 @@ html {
   scroll-behavior: smooth;
   background-color: #002147;
 }
-section {
-  scroll-snap-align: center;
-  max-height: auto;
-}
 
-body{
+body {
   overflow-x: hidden;
 }
 
@@ -37,6 +33,6 @@ input:-webkit-autofill:active {
 }
 
 .bgPhoto {
-  object-fit: cover; 
+  object-fit: cover;
   mask-image: linear-gradient(to right, #ffffff00 5%, rgba(0, 0, 0, 0.773));
 }
