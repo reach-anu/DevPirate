@@ -1,10 +1,10 @@
 import React from "react";
-import "../Styles/LandingPage.css";
-import ship from "../Assets/Images/ship.png";
-import Waves from "../Components/Waves";
+import "../../Styles/LandingPage.css";
+import ship from "../../Assets/Images/ship.png";
+import Waves from "../Waves";
 import { easeInOut, motion } from "framer-motion";
 import { GiPirateFlag } from "react-icons/gi";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
