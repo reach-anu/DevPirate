@@ -7,17 +7,42 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { googleLogin } from "../Utils/googleLogin";
 import googleIcon from "../Assets/Images/googleIcon.svg";
 import Footer from "../Components/Footer";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState();
   const navigate = useNavigate();
   const [submitClicked, setSubmitClicked] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API}/auth/register`,
+        {
+          email,
+          username,
+          password,
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message, {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   const login = useGoogleLogin({
@@ -57,10 +82,10 @@ const Signup = () => {
               <input
                 type="text"
                 className="grow"
-                placeholder="Username"
-                value={userName}
+                placeholder="username"
+                value={username}
                 onChange={(e) => {
-                  setUserName(e.target.value);
+                  setusername(e.target.value);
                 }}
               />
             </label>
