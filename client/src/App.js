@@ -8,6 +8,7 @@ import Signup from "./Pages/Signup";
 import OfferingsPage1 from "./Components/Home/OfferingsPage1";
 import OfferingsPage2 from "./Components/Home/OffieringsPage2";
 import Home from "./Pages/Home";
+import Explore from "./Pages/Explore";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/explore" element={<Explore />} />
         </Routes>
       </GoogleOAuthProvider>
     </>

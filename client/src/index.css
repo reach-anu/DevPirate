@@ -8,10 +8,13 @@ html {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   background-color: #002147;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
 }
 
 body {
   overflow-x: hidden;
+  margin-top: 100px;
 }
 
 input:-webkit-autofill,

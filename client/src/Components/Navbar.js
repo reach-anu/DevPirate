@@ -1,4 +1,5 @@
 import { GiPirateCaptain, GiPirateFlag } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -14,9 +15,9 @@ export default function Navbar() {
           <a href="#" className="text-sm font-semibold leading-6">
             Home
           </a>
-          <a href="#" className="text-sm font-semibold leading-6">
+          <Link to="/explore" className="text-sm font-semibold leading-6">
             Explore
-          </a>
+          </Link>
           <a href="#" className="text-sm font-semibold leading-6">
             Contact
           </a>

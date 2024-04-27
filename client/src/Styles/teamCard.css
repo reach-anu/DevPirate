@@ -1,0 +1,8 @@
+.teamCardContainer {
+    border-radius: 20px;
+    color: whitesmoke;
+    height: 325px;
+    width: 400px;
+    padding: 20px;
+    cursor: pointer;
+}
