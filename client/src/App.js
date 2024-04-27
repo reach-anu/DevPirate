@@ -1,14 +1,12 @@
 import Navbar from "./Components/Navbar";
-import LandingPage from "./Components/Home/LandingPage";
-import Footer from "./Components/Footer";
 import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Signup from "./Pages/Signup";
-import OfferingsPage1 from "./Components/Home/OfferingsPage1";
-import OfferingsPage2 from "./Components/Home/OffieringsPage2";
 import Home from "./Pages/Home";
 import Explore from "./Pages/Explore";
+import Dashboard from "./Pages/Dashboard";
+import TeamProfile from "./Pages/TeamProfile";
 
 function App() {
   return (
@@ -20,6 +18,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/team-profile" element={<TeamProfile />} />
         </Routes>
       </GoogleOAuthProvider>
     </>

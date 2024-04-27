@@ -7,6 +7,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { googleLogin } from "../Utils/googleLogin";
 import googleIcon from "../Assets/Images/googleIcon.svg";
 import Footer from "../Components/Footer";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,8 +17,28 @@ const Login = () => {
   const [submitClicked, setSubmitClicked] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API}/auth/login`, {
+        identifier: email,
+        password: password,
+      });
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
+        toast.success(res.data.message);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message, {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   const login = useGoogleLogin({
