@@ -7,9 +7,10 @@ html {
   padding: 0;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  background-color: #002147;
 }
-
+:root {
+  background-color: #111827;
+}
 body {
   overflow-x: hidden;
 }
