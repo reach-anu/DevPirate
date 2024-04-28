@@ -5,7 +5,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import Signup from "./Pages/Signup";
 import Home from "./Pages/Home";
 import Explore from "./Pages/Explore";
-import Dashboard from "./Pages/Dashboard";
 import TeamProfile from "./Pages/TeamProfile";
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/team-profile" element={<TeamProfile />} />
         </Routes>
       </GoogleOAuthProvider>
