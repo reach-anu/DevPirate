@@ -6,7 +6,7 @@ export default function Navbar() {
     <header className="absolute top-0 w-screen">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:p-8 bg-transparent text-white">
         <div className="flex lg:flex-1 text-white">
-          <a href="#" className="font-bold text-xl flex items-center gap-[5px]">
+          <a href="/" className="font-bold text-xl flex items-center gap-[5px]">
             <GiPirateFlag />
             <span>DevPirate</span>
           </a>
@@ -23,7 +23,7 @@ export default function Navbar() {
           </a>
         </div>
         <div className="lg:flex lg:flex-1 lg:justify-end ">
-          <a href="#" className="text-sm font-semibold leading-6">
+          <a href="/login" className="text-sm font-semibold leading-6">
             Log in <span aria-hidden="true">&rarr;</span>
           </a>
         </div>

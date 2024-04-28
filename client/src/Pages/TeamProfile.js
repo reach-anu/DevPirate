@@ -8,8 +8,17 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import location from "../Assets/Images/location.svg";
 import "../Styles/TeamProfile.css";
+import { FaHeart } from "react-icons/fa";
+import { LuShare } from "react-icons/lu";
+import { MdContentCopy } from "react-icons/md";
+import toast from "react-hot-toast";
 
 function TeamProfile() {
+  const [wishlist, setWishlist] = useState(false);
+  const [visibleItems, setVisibleItems] = useState(4);
+  const [showMore, setShowMore] = useState(false);
+  const [requested, setRequested] = useState(false);
+
   const settings = {
     dots: true,
     infinite: false,
@@ -34,9 +43,6 @@ function TeamProfile() {
     ],
   };
 
-  const [visibleItems, setVisibleItems] = useState(4);
-  const [showMore, setShowMore] = useState(false);
-
   const technologies = [
     "ReactJs",
     "NodeJs",
@@ -49,6 +55,8 @@ function TeamProfile() {
     "ExpressJs",
     "AWS",
   ];
+
+  const domains = ["Education", "Web Development"];
 
   const projects = [
     {
@@ -91,6 +99,24 @@ function TeamProfile() {
     },
   ];
 
+  const users = [
+    {
+      userimg: userImg,
+      userrole: "Captain",
+      username: "Anushaka",
+    },
+    {
+      userimg: userImg,
+      userrole: "Crew Member",
+      username: "Devansh Sahni",
+    },
+    {
+      userimg: userImg,
+      userrole: "Crew Member",
+      username: "Anjali Sharma",
+    },
+  ];
+
   const toggleShowMore = () => {
     setShowMore(!showMore);
     if (!showMore) {
@@ -99,8 +125,42 @@ function TeamProfile() {
       setVisibleItems(4);
     }
   };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        console.log(window.location.href);
+
+        // await navigator.clipboard.writeText(window.location.href);
+        // toast.success("URL copied to clipboard");
+        await navigator.share({
+          title: document.title,
+          url: window.location.href,
+        });
+      } else {
+        throw new Error("Web Share API not supported");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  };
+  const handleCopy = async () => {
+    try {
+      if (navigator.share) {
+        console.log(window.location.href);
+
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("URL copied to clipboard");
+      } else {
+        throw new Error("Web Share API not supported");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  };
+
   return (
-    <div className="bg-gray-900 pt-28 pb-7 min-h-screen text-white px-7 flex flex-col gap-7">
+    <div className="bg-gray-900 py-7 min-h-screen text-white px-7 flex flex-col gap-7">
       <div className="flex gap-3 items-center text-transparent bg-clip-text bg-[#907AD6] ml-12">
         <div className="w-12 h-auto bg-white rounded-[100%] self-center">
           <img src={grpImg} alt="Img" />
@@ -205,41 +265,54 @@ function TeamProfile() {
               </form>
 
               <div className="flex flex-col gap-5 w-full h-56 overflow-y-auto py-1 pb-10">
-                <User
-                  userimg={userImg}
-                  userrole="Captain"
-                  username="Anushaka"
-                />
-                <User
-                  userimg={userImg}
-                  userrole="Crew Member"
-                  username="Devansh Sahni"
-                />
-                <User
-                  userimg={userImg}
-                  userrole="Crew Member"
-                  username="Anjali Sharma"
-                />
-                <User
-                  userimg={userImg}
-                  userrole="Captain"
-                  username="Anushaka"
-                />
-                <User
-                  userimg={userImg}
-                  userrole="Crew Member"
-                  username="Devansh Sahni"
-                />
-                <User
-                  userimg={userImg}
-                  userrole="Crew Member"
-                  username="Anjali Sharma"
-                />
+                {users &&
+                  users.map((user, index) => {
+                    return (
+                      <User
+                        key={index}
+                        userimg={user.userimg}
+                        userrole={user.userrole}
+                        username={user.username}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>
         </div>
         <div className="w-1/4 flex flex-col gap-12">
+          <div className="flex items-center gap-5">
+            <motion.button
+              className="min-w-36 py-2 text-md text-gray-900 tracking-widest bg-[#1B998B] font-extrabold border border-transparent rounded-3xl hover:bg-[#117A74] focus:outline-none focus:border-[#0E665E] focus:ring focus:ring-[#0E665E] focus:ring-opacity-10"
+              onClick={() => setRequested(!requested)}
+              whileHover={{ scale: 1.05 }}
+            >
+              {requested ? "Requested" : "Join"}
+            </motion.button>
+
+            <motion.button className="" whileHover={{ scale: 1.1 }}>
+              <FaHeart
+                size={25}
+                onClick={() => setWishlist(!wishlist)}
+                style={{ color: wishlist ? "red" : "grey" }}
+              />
+            </motion.button>
+            <motion.button
+              className=""
+              whileHover={{ scale: 1.1 }}
+              onClick={handleShare}
+            >
+              <LuShare color="grey" size={25} />
+            </motion.button>
+
+            <motion.button
+              className=""
+              whileHover={{ scale: 1.1 }}
+              onClick={handleCopy}
+            >
+              <MdContentCopy color="grey" size={25} />
+            </motion.button>
+          </div>
           <p className="text-gray-300 font-bold tracking-wide border border-gray-500 rounded p-2">
             Coders passionate about crafting elegant solutions
           </p>
@@ -254,19 +327,18 @@ function TeamProfile() {
               Domain:{" "}
             </h1>
             <p className="flex flex-wrap gap-4 pt-1 rounded font-medium">
-              <motion.mark
-                whileHover={{ scale: 1.05 }}
-                class="px-[18px] py-[6px] tracking-wider text-gray-900 bg-[#907AD6] rounded-3xl hover:cursor-pointer"
-              >
-                Education
-              </motion.mark>
-
-              <motion.mark
-                whileHover={{ scale: 1.05 }}
-                class="px-[18px] py-[6px] tracking-wider text-gray-900 bg-[#907AD6] rounded-3xl hover:cursor-pointer"
-              >
-                Web Development
-              </motion.mark>
+              {domains &&
+                domains.map((domain, index) => {
+                  return (
+                    <motion.mark
+                      key={index}
+                      whileHover={{ scale: 1.05 }}
+                      class="px-[18px] py-[6px] tracking-wider text-gray-900 bg-[#907AD6] rounded-3xl hover:cursor-pointer"
+                    >
+                      {domain}
+                    </motion.mark>
+                  );
+                })}
             </p>
           </div>
           <div className="flex flex-col gap-3">
