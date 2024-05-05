@@ -13,7 +13,7 @@ const TeamCard = ({ team }) => {
     naviagte(`/team-profile/${team.id}`)
   }
   return (
-    <div className='bg-base-200 border-2 border-gray-700 relative flex flex-col teamCardContainer justify-between' onClick={handleClick}>
+    <div className='bg-[#202736a1] border-2 border-gray-700 relative flex flex-col teamCardContainer justify-between' onClick={handleClick}>
       <div>
         <h3 className="w-fit font-bold text-3xl">DevPirate </h3>
         <h3 className="text-nowrap w-4/5 text-sm text-ellipsis overflow-hidden">Lock up your chests before we loot them all.</h3>
