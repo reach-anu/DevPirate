@@ -67,7 +67,7 @@ const Signup = () => {
     <>
       <div className="homeContainer min-h-screen flex items-center">
         <motion.div
-          className="w-1/2 pl-32 px-24 mt-16 z-10"
+          className="w-1/2 pl-32 px-24 z-10"
           animate={{ opacity: 1, scale: 1 }}
           initial={{ opacity: 0, scale: 0.5 }}
         >
