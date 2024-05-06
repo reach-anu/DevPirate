@@ -50,17 +50,17 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
   }
 
   return (
-    <div className={`relative -top-12`}>
+    <div className="relative -top-10">
       <div
-        className="z-10 btn bg-transparent text-xl fixed ml-3"
+        className="z-10 btn bg-transparent text-xl fixed ml-3 hover:bg-[#202736a1] border-none"
         onClick={() => { !activeFilter ? setFilterPanel(!filterPanel) : handleCloseSecondaryFilters() }}
       >
         {filterPanel ? <>{!activeFilter ? <RxCross2 /> : <BiLeftArrowAlt />} </> : <BiMenuAltLeft />}
       </div>
       <div
-        className={`${!filterPanel && "hidden"} relative `}
+        className={`${!filterPanel && "hidden"} relative`}
       >
-        <div className="menu fixed p-4 pt-12 w-72 bg-base-200 text-base-content rounded-box h-full">
+        <div className="menu fixed p-4 pt-12 w-72 bg-[#202736a1] text-base-content rounded-box h-full">
           {!activeFilter ?
             <>
               <h1 className='text-center text-lg p-1 pt-0'>Filters</h1>

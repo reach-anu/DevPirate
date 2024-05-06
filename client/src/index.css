@@ -12,9 +12,10 @@ html {
 }
 :root {
   background-color: #111827;
+  color: #D8D4D5;
 }
 body {
-  overflow-x: hidden;
+  overflow: hidden;
   margin-top: 100px;
 }
 
