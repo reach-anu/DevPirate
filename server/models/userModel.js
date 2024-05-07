@@ -20,6 +20,25 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    requestsSent: [
+      {
+        teamName: {
+          type: String,
+          required: true,
+        },
+        status: {
+          type: String,
+        },
+      },
+    ],
+    requestsReceived: [
+      {
+        teamName: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

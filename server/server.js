@@ -17,6 +17,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", require("./routes/authRoute.js"));
+app.use("/team", require("./routes/teamRoute.js"));
+app.use("/user", require("./routes/userRoute.js"));
 
 app.listen(PORT, () => {
   console.log(`Server started at PORT ${PORT}`);
