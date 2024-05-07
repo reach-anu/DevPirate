@@ -7,6 +7,8 @@ import PirateCard from "../Components/PirateCard";
 import ninja from "../Assets/Images/ninja.png";
 import pirat from "../Assets/Images/pirate.png";
 import pirateUncle from "../Assets/Images/pirateUncle.png";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Explore = () => {
   const [showTeams, setShowTeams] = useState(true);
@@ -14,6 +16,28 @@ const Explore = () => {
   const [appliedFilters, setAppliedFilters] = useState({});
   const [teams, setTeams] = useState([]);
   const [members, setMembers] = useState([]);
+
+  //set values if user state is stored (using redux)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const username = "anjali-8001";
+
+  const getTeams = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API}/team/get-All`,
+        {
+          isLoggedIn,
+          username,
+        }
+      );
+      if (res?.data?.success) {
+        setTeams(res?.data?.teams);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   useEffect(() => {
     //Fetch call for the teams with applied Filters
@@ -25,6 +49,7 @@ const Explore = () => {
       { id: 1, name: "Samurai", img: ninja, bg: "#ff85a2" },
       { id: 4, name: "Abcd", img: ninja, bg: "#A3D8A6" },
     ]);
+    getTeams();
   }, [appliedFilters]);
 
   return (
@@ -77,3 +102,4 @@ const Explore = () => {
 };
 
 export default Explore;
+
