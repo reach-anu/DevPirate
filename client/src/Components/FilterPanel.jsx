@@ -3,31 +3,32 @@ import "../Styles/explore.css"
 import { BiLeftArrowAlt, BiMenuAltLeft } from "react-icons/bi";
 import { RxCross2 } from "react-icons/rx";
 import { CiSearch } from 'react-icons/ci';
+import axios from 'axios';
 
 const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFilters }) => {
   const [activeFilter, setActiveFilter] = useState("");
   const [filters, setFilters] = useState([]);
   const [secondaryFilters, setSecondaryFilters] = useState([]);
+  const [secondaryFiltersCopy, setSecondaryFiltersCopy] = useState([]);
 
   useEffect(() => {
-    // Fetch all the filters through an api endpoint
-    setFilters(["Technology", "Theme", "Location", "Members"]);
+    const getFilters = async () => {
+      const response = await axios.get(`${process.env.REACT_APP_API}/filter/all-filters`);
+      setFilters(await response.data.data);
+    }
+    getFilters();
   }, [])
 
+  useEffect(()=>{
+    setSecondaryFiltersCopy(secondaryFilters);
+  },[secondaryFilters])
+
   const handleFilterClick = async (filterName) => {
-    //fetch secondary filters from backend based on filter Name
     setActiveFilter(filterName);
-    setSecondaryFilters([
-      'React',
-      'Mongo',
-      'A.I.',
-      'Blockchain',
-      'Express',
-      'Python',
-      'C++',
-      'Rust',
-      'Kotlin',
-    ]);
+    const response = await axios.post(`${process.env.REACT_APP_API}/filter/subfilters`, {
+      filter: filterName
+    });
+    setSecondaryFilters(await response.data?.data);
   }
 
   const handleCloseSecondaryFilters = () => {
@@ -58,17 +59,17 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
         {filterPanel ? <>{!activeFilter ? <RxCross2 /> : <BiLeftArrowAlt />} </> : <BiMenuAltLeft />}
       </div>
       <div
-        className={`${!filterPanel && "hidden"} relative`}
+        className={`${!filterPanel && "hidden"}`}
       >
-        <div className="menu fixed p-4 pt-12 w-72 bg-[#202736a1] text-base-content rounded-box h-full">
+        <div className="menu fixed p-4 pt-12 w-72 bg-[#202736] text-base-content rounded-box h-full">
           {!activeFilter ?
             <>
               <h1 className='text-center text-lg p-1 pt-0'>Filters</h1>
               <hr className='border-gray-500 opacity-50 w-4/5 mx-auto pb-4' />
-              <div className='text-center'>
+              <div className='text-center relative h-4/5'>
                 <ul className='filterPanel text-left'>
                   {
-                    filters.map((filter) => {
+                    filters?.map((filter) => {
                       const subFilterLength = appliedFilters[filter]?.length;
                       return <li onClick={() => handleFilterClick(filter)} style={{ "color": subFilterLength && "#1b998b" }}>
                         {filter}
@@ -78,7 +79,7 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
                   }
                 </ul>
                 {!!Object.keys(appliedFilters).length &&
-                  <button type="button" className='bg-red-500 opacity-80 p-2 rounded-xl w-4/5 mt-60' onClick={() => setAppliedFilters({})}>Remove all filters</button>}
+                  <button type="button" className='bg-red-500 opacity-80 p-2 rounded-xl w-4/5 bottom-5 left-6 absolute' onClick={() => setAppliedFilters({})}>Remove all filters</button>}
               </div>
             </>
             :
@@ -87,13 +88,24 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
               <hr className='border-gray-500 opacity-50 w-4/5 mx-auto pb-4' />
               <div className="mx-auto my-5">
                 <label className="input input-bordered flex items-center gap-2 h-8">
-                  <input type="text" className="grow" placeholder="Search" />
+                  <input
+                    type="text"
+                    className="grow"
+                    placeholder="Search"
+                    onChange={(e) => {
+                      setSecondaryFiltersCopy(
+                        secondaryFilters.filter((filter) =>
+                          (filter.toLowerCase()).includes(e.target.value.toLowerCase())
+                        )
+                      )
+                    }}
+                  />
                   <CiSearch />
                 </label>
               </div>
               <div className='text-center overflow-y-auto'>
                 <ul className='filterPanel text-left h-96'>
-                  {secondaryFilters?.map((subFilter, key) => (
+                  {secondaryFiltersCopy?.map((subFilter, key) => (
                     <li key={key} onClick={() => handletoggleFilters(subFilter)} style={{ "color": appliedFilters[activeFilter]?.includes(subFilter) && "#1b998b" }}>
                       {subFilter}
                     </li>
