@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import grpImg from "../Assets/Images/group.png";
 import userImg from "../Assets/Images/user.png";
 import User from "../Components/TeamProfile/User";
@@ -12,12 +12,17 @@ import { FaHeart } from "react-icons/fa";
 import { LuShare } from "react-icons/lu";
 import { MdContentCopy } from "react-icons/md";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function TeamProfile() {
+  const { teamName } = useParams();
   const [wishlist, setWishlist] = useState(false);
   const [visibleItems, setVisibleItems] = useState(4);
   const [showMore, setShowMore] = useState(false);
-  const [requested, setRequested] = useState(false);
+  const [isRequested, setIsRequested] = useState(false);
+  const [team, setTeam] = useState({});
+  const username = "anjali-8001";
 
   const settings = {
     dots: true,
@@ -43,84 +48,10 @@ function TeamProfile() {
     ],
   };
 
-  const technologies = [
-    "ReactJs",
-    "NodeJs",
-    "MongoDb",
-    "ExpressJs",
-    "AWS",
-    "ReactJs",
-    "NodeJs",
-    "MongoDb",
-    "ExpressJs",
-    "AWS",
-  ];
-
-  const domains = ["Education", "Web Development"];
-
-  const projects = [
-    {
-      name: "Project 1",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-    {
-      name: "Project 2",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-    {
-      name: "Project 3",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-  ];
-
-  const hackathons = [
-    {
-      name: "Hackathon 1",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-    {
-      name: "Hackathon 2",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-    {
-      name: "Hackathon 3",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-    {
-      name: "Hackathon 4",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex nemo esse repellat accusantium",
-    },
-  ];
-
-  const users = [
-    {
-      userimg: userImg,
-      userrole: "Captain",
-      username: "Anushaka",
-    },
-    {
-      userimg: userImg,
-      userrole: "Crew Member",
-      username: "Devansh Sahni",
-    },
-    {
-      userimg: userImg,
-      userrole: "Crew Member",
-      username: "Anjali Sharma",
-    },
-  ];
-
   const toggleShowMore = () => {
     setShowMore(!showMore);
     if (!showMore) {
-      setVisibleItems(technologies.length);
+      setVisibleItems(team?.technologies.length);
     } else {
       setVisibleItems(4);
     }
@@ -129,10 +60,6 @@ function TeamProfile() {
   const handleShare = async () => {
     try {
       if (navigator.share) {
-        console.log(window.location.href);
-
-        // await navigator.clipboard.writeText(window.location.href);
-        // toast.success("URL copied to clipboard");
         await navigator.share({
           title: document.title,
           url: window.location.href,
@@ -148,9 +75,14 @@ function TeamProfile() {
     try {
       if (navigator.share) {
         console.log(window.location.href);
-
         await navigator.clipboard.writeText(window.location.href);
-        toast.success("URL copied to clipboard");
+        toast("URL copied to clipboard", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
       } else {
         throw new Error("Web Share API not supported");
       }
@@ -159,29 +91,105 @@ function TeamProfile() {
     }
   };
 
+  const getTeamDetails = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/team/get/${teamName}`
+      );
+      if (res.data?.success) {
+        setTeam(res?.data?.team);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const checkJoinTeam = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API}/user/check-join-request/${username}`,
+        {
+          teamName,
+        }
+      );
+      if (res.data?.success && res.data?.requestSent) {
+        setIsRequested(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleJoinClick = async () => {
+    // if user is not logged in navigate to /login
+
+    if (!isRequested) {
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API}/user/send-join-request/${username}`,
+          {
+            teamName,
+            isRequested: true,
+          }
+        );
+        if (res.data?.success) {
+          setIsRequested(true);
+          toast.success("Request sent successfully");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API}/user/send-join-request/${username}`,
+          {
+            teamName,
+            isRequested: false,
+          }
+        );
+        if (res.data?.success) {
+          setIsRequested(false);
+          toast.success("Request withdrawn successfully");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getTeamDetails();
+    checkJoinTeam();
+  }, []);
+
   return (
     <div className="bg-gray-900 py-7 min-h-screen text-white px-7 flex flex-col gap-7">
       <div className="flex gap-3 items-center text-transparent bg-clip-text bg-[#907AD6] ml-12">
         <div className="w-12 h-auto bg-white rounded-[100%] self-center">
-          <img src={grpImg} alt="Img" />
+          <img
+            src={team.profilePicture ? team.profilePicture : grpImg}
+            alt="Img"
+          />
         </div>
         <div>
           <span className="tracking-wide font-extrabold text-3xl">
-            Raging Bytes{" "}
+            {team.name}{" "}
           </span>
-          <span className="text-lg text-gray-400">(3 Pirates)</span>
+          <span className="text-lg text-gray-400">
+            ({team.members?.length} Pirates)
+          </span>
         </div>
       </div>
       <div className="flex w-full gap-5">
         <div className="w-3/4 px-2 flex flex-col gap-12">
-          <div className="flex flex-col gap-3 mx-10">
-            <h1 className="text-lg text-[#978DBA] font-bold tracking-wide mx-3">
-              Hackathons Participated:{" "}
-            </h1>
-            <div className="">
-              <Slider {...settings}>
-                {hackathons &&
-                  hackathons.map((hackathon, index) => {
+          {team.hackathons?.length > 0 && (
+            <div className="flex flex-col gap-3 mx-10">
+              <h1 className="text-lg text-[#978DBA] font-bold tracking-wide mx-3">
+                Hackathons Participated:{" "}
+              </h1>
+              <div className="">
+                <Slider {...settings}>
+                  {team.hackathons.map((hackathon, index) => {
                     return (
                       <div
                         key={index}
@@ -196,17 +204,18 @@ function TeamProfile() {
                       </div>
                     );
                   })}
-              </Slider>
+                </Slider>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-3 mx-10">
-            <h1 className="text-lg text-[#978DBA] font-bold tracking-wide mx-3">
-              Projects:{" "}
-            </h1>
-            <div className="">
-              <Slider {...settings} className="flex justify-start">
-                {hackathons &&
-                  projects.map((project, index) => {
+          )}
+          {team.projects?.length > 0 && (
+            <div className="flex flex-col gap-3 mx-10">
+              <h1 className="text-lg text-[#978DBA] font-bold tracking-wide mx-3">
+                Projects:{" "}
+              </h1>
+              <div className="">
+                <Slider {...settings} className="flex justify-start">
+                  {team.projects.map((project, index) => {
                     return (
                       <div
                         key={index}
@@ -221,12 +230,13 @@ function TeamProfile() {
                       </div>
                     );
                   })}
-              </Slider>
+                </Slider>
+              </div>
             </div>
-          </div>
+          )}
           <div className="flex flex-col gap-2 mx-10">
             <h1 className="text-lg text-[#978DBA] font-bold tracking-wide mx-3 ">
-              Members (3):{" "}
+              Pirates ({team.members?.length}):{" "}
             </h1>
             <div className="flex flex-col gap-5 mx-3 items-center">
               <form class="my-3 w-full">
@@ -265,17 +275,16 @@ function TeamProfile() {
               </form>
 
               <div className="flex flex-col gap-5 w-full h-56 overflow-y-auto py-1 pb-10">
-                {users &&
-                  users.map((user, index) => {
-                    return (
-                      <User
-                        key={index}
-                        userimg={user.userimg}
-                        userrole={user.userrole}
-                        username={user.username}
-                      />
-                    );
-                  })}
+                {team.members?.map((user, index) => {
+                  return (
+                    <User
+                      key={index}
+                      userimg={user.userimg ? user.userImg : userImg}
+                      userrole={user.userrole}
+                      username={user.username}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -284,10 +293,10 @@ function TeamProfile() {
           <div className="flex items-center gap-5">
             <motion.button
               className="min-w-36 py-2 text-md text-gray-900 tracking-widest bg-[#1B998B] font-extrabold border border-transparent rounded-3xl hover:bg-[#117A74] focus:outline-none focus:border-[#0E665E] focus:ring focus:ring-[#0E665E] focus:ring-opacity-10"
-              onClick={() => setRequested(!requested)}
+              onClick={handleJoinClick}
               whileHover={{ scale: 1.05 }}
             >
-              {requested ? "Requested" : "Join"}
+              {isRequested ? "Requested" : "Join"}
             </motion.button>
 
             <motion.button className="" whileHover={{ scale: 1.1 }}>
@@ -313,61 +322,69 @@ function TeamProfile() {
               <MdContentCopy color="grey" size={25} />
             </motion.button>
           </div>
-          <p className="text-gray-300 font-bold tracking-wide border border-gray-500 rounded p-2">
-            Coders passionate about crafting elegant solutions
-          </p>
-          <div className="flex gap-1 items-center">
-            <div className="w-5 h-auto">
-              <img src={location} alt="" />
+          {team.bio !== "" && (
+            <p className="text-gray-300 font-bold tracking-wide border border-gray-500 rounded p-2">
+              {team.bio}
+            </p>
+          )}
+          {team.location !== "" && (
+            <div className="flex gap-1 items-center">
+              <div className="w-5 h-auto">
+                <img src={location} alt="" />
+              </div>
+              <p className="">{team.location}</p>
             </div>
-            <p className="">Delhi, India</p>
-          </div>
-          <div className="flex flex-col gap-3 w-full">
-            <h1 className="text-lg text-[#978DBA] font-bold tracking-wide">
-              Domain:{" "}
-            </h1>
-            <p className="flex flex-wrap gap-4 pt-1 rounded font-medium">
-              {domains &&
-                domains.map((domain, index) => {
+          )}
+          {team.domains?.length > 0 && (
+            <div className="flex flex-col gap-3 w-full">
+              <h1 className="text-lg text-[#978DBA] font-bold tracking-wide">
+                Domain:{" "}
+              </h1>
+              <p className="flex flex-wrap gap-4 pt-1 rounded font-medium">
+                {team.domains.map((domain, index) => {
                   return (
                     <motion.mark
                       key={index}
                       whileHover={{ scale: 1.05 }}
-                      class="px-[18px] py-[6px] tracking-wider text-gray-900 bg-[#907AD6] rounded-3xl hover:cursor-pointer"
+                      class="px-[18px] py-[6px] tracking-wider text-gray-900 bg-[#44A5C5] rounded-3xl hover:cursor-pointer"
                     >
                       {domain}
                     </motion.mark>
                   );
                 })}
-            </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h1 className="text-lg text-[#978DBA] font-bold tracking-wide">
-              Technology:{" "}
-            </h1>
-            <p className="flex flex-wrap gap-4 rounded pt-1 font-medium">
-              {technologies &&
-                technologies.slice(0, visibleItems).map((technology, index) => {
-                  return (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.05 }}
-                      className="px-[18px] py-[6px] tracking-wider bold text-gray-900  bg-[#907AD6]  rounded-3xl hover:cursor-pointer"
-                    >
-                      {technology}
-                    </motion.div>
-                  );
-                })}
-              {technologies?.length > 4 && (
-                <button
-                  onClick={toggleShowMore}
-                  className="text-sm text-gray-400 hover:text-gray-200 focus:outline-none"
-                >
-                  {showMore ? "- less" : "+ more"}
-                </button>
-              )}
-            </p>
-          </div>
+              </p>
+            </div>
+          )}
+          {team.technologies?.length > 0 && (
+            <div className="flex flex-col gap-3">
+              <h1 className="text-lg text-[#978DBA] font-bold tracking-wide">
+                Technology:{" "}
+              </h1>
+              <p className="flex flex-wrap gap-4 rounded pt-1 font-medium">
+                {team.technologies
+                  .slice(0, visibleItems)
+                  .map((technology, index) => {
+                    return (
+                      <motion.div
+                        key={index}
+                        whileHover={{ scale: 1.05 }}
+                        className="px-[18px] py-[6px] tracking-wider bold text-gray-900  bg-[#44A5C5]  rounded-3xl hover:cursor-pointer"
+                      >
+                        {technology}
+                      </motion.div>
+                    );
+                  })}
+                {team.technologies.length > 4 && (
+                  <button
+                    onClick={toggleShowMore}
+                    className="text-sm text-gray-400 hover:text-gray-200 focus:outline-none"
+                  >
+                    {showMore ? "- less" : "+ more"}
+                  </button>
+                )}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/team-profile" element={<TeamProfile />} />
+          <Route path="/team-profile/:teamName" element={<TeamProfile />} />
         </Routes>
         <Footer/>
       </GoogleOAuthProvider>
