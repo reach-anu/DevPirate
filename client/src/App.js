@@ -7,11 +7,13 @@ import Home from "./Pages/Home";
 import Explore from "./Pages/Explore";
 import TeamProfile from "./Pages/TeamProfile";
 import Footer from "./Components/Footer";
+import { useSelector } from "react-redux";
 
 function App() {
   return (
     <>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_ID}>
+        {!useSelector((state) => state.authReducer.value) && <Navbar />}
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

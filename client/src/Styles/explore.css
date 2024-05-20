@@ -8,7 +8,7 @@
 .filterPanel li span {
     position: absolute;
     right: 10px;
-    top: 2px;
+    top: 12px;
     border-radius: 50%;
     font-size: 12px;
 }

@@ -43,7 +43,7 @@ const Explore = () => {
     //Fetch call for the teams with applied Filters
     setTeams([{ id: 1 }, { id: 2 }]);
     setMembers([
-      { id: 1, name: "Devansh", img: pirateUncle, bg: "#ff6b6b", github:"https://github.com/reach-anu/DevPirate/tree/devansh" },
+      { id: 1, name: "Devansh", img: pirateUncle, bg: "#ff6b6b", github: "https://github.com/reach-anu/DevPirate/tree/devansh" },
       { id: 2, name: "Anushaka", img: ninja, bg: "#fefe52" },
       { id: 3, name: "Anjali", img: pirat, bg: "#B48EAD" },
       { id: 1, name: "Samurai", img: ninja, bg: "#ff85a2" },
@@ -53,15 +53,15 @@ const Explore = () => {
   }, [appliedFilters]);
 
   return (
-    <div className="min-h-svh">
-      <div className="fixed w-full z-10">
+    <div className="min-h-svh mb-28">
+      <div className="fixed w-full z-10 bg-[#202736] py-3">
         <label className="w-96 input input-bordered flex m-auto items-center gap-2 bg-[#202736a1]">
           <input type="text" className="grow" placeholder="Search" />
           <CiSearch />
         </label>
         <div
           role="tablist"
-          className="tabs tabs-boxed absolute top-0 right-10 gap-2"
+          className="tabs tabs-boxed absolute top-3 right-10 gap-2"
         >
           <a
             role="tab"
@@ -89,12 +89,11 @@ const Explore = () => {
         />
 
         <div
-          className={`flex gap-12 flex-wrap justify-center mt-16 mx-10
-        ${filterPanel ? "w-[calc(100vw-350px)]" : "w-full"}`}
+          className={`flex gap-12 flex-wrap justify-center mt-16 mx-10 w-full`}
         >
           {showTeams
             ? members.map((member) => <PirateCard pirate={member} />)
-            : teams.map((team) => <TeamCard team={team} />) }
+            : teams.map((team) => <TeamCard team={team} />)}
         </div>
       </div>
     </div>

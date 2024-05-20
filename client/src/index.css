@@ -7,7 +7,6 @@ html {
   padding: 0;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  overflow-x: hidden;
   scrollbar-gutter: stable;
 }
 :root {
@@ -15,8 +14,8 @@ html {
   color: #D8D4D5;
 }
 body {
-  overflow: hidden;
-  margin-top: 100px;
+  overflow-x: hidden;
+  margin-top: 80px;
 }
 
 input:-webkit-autofill,

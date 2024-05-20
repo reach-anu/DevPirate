@@ -19,9 +19,17 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
     getFilters();
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (filterPanel) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
+  }, [filterPanel])
+
+  useEffect(() => {
     setSecondaryFiltersCopy(secondaryFilters);
-  },[secondaryFilters])
+  }, [secondaryFilters])
 
   const handleFilterClick = async (filterName) => {
     setActiveFilter(filterName);
@@ -51,22 +59,29 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
   }
 
   return (
-    <div className="relative -top-10">
+    <div className="absolute top-24 z-20">
       <div
-        className="z-10 btn bg-transparent text-xl fixed ml-3 hover:bg-[#202736a1] border-none"
-        onClick={() => { !activeFilter ? setFilterPanel(!filterPanel) : handleCloseSecondaryFilters() }}
+        className="z-10 fixed btn bg-transparent text-xl ml-3 hover:bg-[#202736a1] border-none"
+        onClick={() => setFilterPanel(true)}
       >
-        {filterPanel ? <>{!activeFilter ? <RxCross2 /> : <BiLeftArrowAlt />} </> : <BiMenuAltLeft />}
+        <BiMenuAltLeft />
       </div>
-      <div
-        className={`${!filterPanel && "hidden"}`}
-      >
-        <div className="menu fixed p-4 pt-12 w-72 bg-[#202736] text-base-content rounded-box h-full">
+
+      <div className={`${!filterPanel ? "hidden" : ""} backdrop-blur-sm fixed w-full h-full`} onClick={(e)=>{setFilterPanel(false)}}>
+        <div className="fixed p-7 top-20 left-1/4 h-4/6 w-2/4 bg-[#202736] text-base-content rounded-box border" onClick={(e)=>{e.stopPropagation()}}>
+
+          <div
+            className="z-30 btn btn-sm bg-transparent text-xl hover:bg-[#202736a1] border-none"
+            onClick={() => { !activeFilter ? setFilterPanel(!filterPanel) : handleCloseSecondaryFilters() }}
+          >
+            {!activeFilter ? <RxCross2 /> : <BiLeftArrowAlt />}
+          </div>
+
           {!activeFilter ?
             <>
-              <h1 className='text-center text-lg p-1 pt-0'>Filters</h1>
-              <hr className='border-gray-500 opacity-50 w-4/5 mx-auto pb-4' />
-              <div className='text-center relative h-4/5'>
+              <h1 className='text-center text-xl p-1 pt-0'>Filters</h1>
+              <hr className='border-gray-500 opacity-50 mx-auto pb-4' />
+              <div className='text-center relative h-5/6'>
                 <ul className='filterPanel text-left'>
                   {
                     filters?.map((filter) => {
@@ -79,13 +94,13 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
                   }
                 </ul>
                 {!!Object.keys(appliedFilters).length &&
-                  <button type="button" className='bg-red-500 opacity-80 p-2 rounded-xl w-4/5 bottom-5 left-6 absolute' onClick={() => setAppliedFilters({})}>Remove all filters</button>}
+                  <button type="button" className='bg-red-500 opacity-80 p-2 rounded-xl w-2/4 bottom-0 left-1/4 absolute' onClick={() => setAppliedFilters({})}>Remove all filters</button>}
               </div>
             </>
             :
             <>
-              <h1 className='text-center text-lg p-1 pt-0'>{activeFilter}</h1>
-              <hr className='border-gray-500 opacity-50 w-4/5 mx-auto pb-4' />
+              <h1 className='text-center text-xl p-1 pt-0'>{activeFilter}</h1>
+              <hr className='border-gray-500 opacity-50 mx-auto pb-4' />
               <div className="mx-auto my-5">
                 <label className="input input-bordered flex items-center gap-2 h-8">
                   <input
@@ -103,8 +118,8 @@ const FilterPanel = ({ setFilterPanel, filterPanel, appliedFilters, setAppliedFi
                   <CiSearch />
                 </label>
               </div>
-              <div className='text-center overflow-y-auto'>
-                <ul className='filterPanel text-left h-96'>
+              <div className='text-center h-4/6 overflow-y-auto'>
+                <ul className='filterPanel text-left'>
                   {secondaryFiltersCopy?.map((subFilter, key) => (
                     <li key={key} onClick={() => handletoggleFilters(subFilter)} style={{ "color": appliedFilters[activeFilter]?.includes(subFilter) && "#1b998b" }}>
                       {subFilter}
