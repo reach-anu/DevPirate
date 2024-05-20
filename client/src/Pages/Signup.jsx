@@ -9,6 +9,8 @@ import googleIcon from "../Assets/Images/googleIcon.svg";
 import Footer from "../Components/Footer";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { changeAuth } from "../redux/feature/auth";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +18,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [submitClicked, setSubmitClicked] = useState(false);
 
   const handleLogin = async (e) => {
@@ -31,6 +34,7 @@ const Signup = () => {
       );
       if (res.data.success) {
         toast.success(res.data.message);
+        dispatch(changeAuth(true));
         navigate("/login");
       }
     } catch (error) {

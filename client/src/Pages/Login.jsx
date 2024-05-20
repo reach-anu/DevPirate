@@ -9,6 +9,8 @@ import googleIcon from "../Assets/Images/googleIcon.svg";
 import Footer from "../Components/Footer";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { changeAuth } from "../redux/feature/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +18,7 @@ const Login = () => {
   const [user, setUser] = useState();
   const [submitClicked, setSubmitClicked] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,10 +30,10 @@ const Login = () => {
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
         toast.success(res.data.message);
+        dispatch(changeAuth(true));
         navigate("/explore");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message, {
         style: {
           borderRadius: "10px",
@@ -42,7 +45,10 @@ const Login = () => {
   };
 
   const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      dispatch(changeAuth(true));
+    },
     onError: (error) => console.log("Login Failed:", error),
   });
 
